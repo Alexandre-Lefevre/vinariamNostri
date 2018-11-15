@@ -1,0 +1,149 @@
+@font-face {
+    font-family: "Pacifico";
+    src: url('/Font_Style/Pacifico.ttf');
+}
+
+body {
+    background-image: url(img/Bg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#BgHead {
+    font-family: "Pacifico", Helvetica, Arial, sans-serif;
+    min-height: 9.8em;
+    max-height: 9.9em;
+    background-image: url(img/header.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-style: inset;
+    border-color: saddlebrown;
+    border-radius: 0.6em;
+    border-width: thin;
+    margin-top: 0.3em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+}
+
+#containerHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 1.2em;
+}
+
+#BgHead > div > h1,
+#BgHead > div > h3 {
+    color: black;
+    text-shadow: #FDFEFE 1px 1px, #FDFEFE -1px 1px, #FDFEFE -1px -1px, #FDFEFE 1px -1px;
+    margin: auto;
+}
+
+#BgHead > div > h1 {
+    margin-bottom: 9px;
+}
+
+#Ft {
+    background-color: rgba(166, 172, 175, 0.3);
+    min-height: 7.8em;
+    max-height: 7.9em;
+    border-style: inset;
+    border-width: thin;
+    border-radius: 0.6em;
+    border-color: black;
+    width: 100%;
+}
+
+#ContenairPrincipal {
+    min-height: 60em;
+}
+
+#icone {
+    height: 70px;
+}
+
+.style-navbar {
+    background-image: url(/img/BG_NAV_BAR.jpg);
+    background-size: cover;
+    border: 1px solid black;
+    border-radius: 0.4em;
+    margin-right: 0.2em;
+    margin-left: 0.2em;
+}
+
+
+.boutonNavbar {
+    background-color: rgba(210, 180, 140, 0.5);
+    border: 2px solid rgba(205, 133, 63, 0.8);
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+    text-shadow: -1px 0 bisque, 0 1px bisque, 1px 0 bisque, 0 -1px bisque;
+    margin-left: 10px;
+
+}
+
+.boutonNavbar:hover {
+    background-color: rgba(210, 180, 140, 0.9);
+}
+
+
+#boutonConnexion {
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 992px) {
+    #BgHead {
+        min-height: 7.8em;
+        max-height: 7.9em;
+    }
+
+    #containerHeader {
+        max-height: 5em;
+        margin-top: 1.5em;
+    }
+
+    #BgHead > div > h1,
+    #BgHead > div > h3 {
+        font-size: 1.7em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #BgHead {
+        min-height: 6.8em;
+        max-height: 6.9em;
+    }
+
+    #containerHeader {
+        max-height: 2em;
+        margin-top: 1.5em;
+    }
+
+    #BgHead > div > h1,
+    #BgHead > div > h3 {
+        font-size: 1.4em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #BgHead {
+        min-height: 5.8em;
+        max-height: 5.9em;
+    }
+
+    #containerHeader {
+        max-height: 2em;
+        margin-top: 1.5em;
+    }
+
+    #BgHead > div > h1,
+    #BgHead > div > h3 {
+        font-size: 1.1em;
+    }
+}
+
+}
