@@ -1,1 +1,35 @@
 
+#icone {
+    height: 70px;
+}
+
+    
+.style-navbar{
+    background-image: url(BG_NAV_BAR.jpg);
+    background-size:cover;
+    font-size: 25px;
+    border: 1px solid black;   
+    
+}
+
+
+.boutonNavbar{
+  background-color: rgba(210,180,140,0.5);
+    border: 2px solid rgba(205,133,63,0.8);
+    color : black;
+    font-size: 25px;
+    font-weight: bold;
+     text-shadow: -1px 0 bisque, 0 1px bisque, 1px 0 bisque, 0 -1px bisque;
+    margin-left: 10px;
+    
+}
+.boutonNavbar:hover{
+    background-color: rgba(210,180,140,0.9);
+}
+
+
+#boutonConnexion{
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+}
