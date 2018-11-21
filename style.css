@@ -105,6 +105,9 @@ body {
     color: white;
     margin-bottom: 2em;
 }
+#AffichageListeMetsQuandEnregistrer {
+    color: white;
+}
 
 @media screen and (max-width: 992px) {
     #BgHead {
@@ -121,6 +124,20 @@ body {
     #BgHead > div > h3 {
         font-size: 1.7em;
     }
+}
+
+table {
+    border     : 1px solid gray;
+    width      : 100%;
+    text-align : center;
+}
+ 
+table#sourcetable tbody tr {
+    background-color: rgba(166, 172, 175, 0.3);
+}
+ 
+table#sourcetable tbody  tr {
+    cursor : pointer;
 }
 
 @media screen and (max-width: 600px) {
