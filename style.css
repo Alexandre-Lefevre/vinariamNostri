@@ -186,3 +186,36 @@ table#sourcetable tbody  tr {
         font-size: 1.1em;
     }
 }
+
+td, th {
+    border: 1px solid #A0522D;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #A0522D;
+    
+}
+
+
+.menuRetractable {
+ background-color: antiquewhite;
+    color :#A0522D;
+    
+/*    display: none;*/
+    
+}
+
+
+#containerPrincipal{
+    
+    text-align: left;
+    
+    
+}
+
+.affichageEnLigne {
+    display: inline-flex;
+    text-align: left;
+}
