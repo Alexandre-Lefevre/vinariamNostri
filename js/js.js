@@ -1119,3 +1119,127 @@ function AjouterUnVinEnStock() {
 $('#btnAjouterStock').click(function () {
     AjouterUnVinEnStock();
 });
+
+        
+        
+        //partie Vinothèque
+        
+        
+        $('#boutonVinotheque').click(function () {
+    recupererListeDesVins('#ContenairPrincipal');
+});
+
+//
+//
+//Mise en place de la barre de recherche
+//
+//
+
+
+function mettreLaBarreDeRecherche(emplacementBarreDeRecherche){
+    $(emplacementBarreDeRecherche).prepend('<div id = "zoneDesBarresDeRecherche" class="container"></div>');
+
+    $('#zoneDesBarresDeRecherche').prepend('<div id="barreDeRecherche2"></div>');
+$('#barreDeRecherche2').append('<input type="text" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-lg-offset-1" id="leChampDeRecherche2" onkeyup="fonctionRechercheAvancee()" placeholder="Filtre mets en accord, cépages..."></br></br>');
+    $('#zoneDesBarresDeRecherche').prepend('<div id="barreDeRecherche1"></div>');
+$('#barreDeRecherche1').append('<input type="text" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-lg-offset-1" id="leChampDeRecherche1" onkeyup="fonctionRechercheAvancee()" placeholder="Filtre cuvée, type, région..."></br></br>');
+};
+
+function fonctionRechercheAvancee(){
+    let filtre1 = $('#leChampDeRecherche1').val().toUpperCase();
+    let filtre2 = $('#leChampDeRecherche2').val().toUpperCase();
+    for (let i = 0 ; i<=($('#tableauPrincipal>div').length); i++){
+     if((($('#infosLigne'+i).html().toUpperCase().indexOf(filtre2))> -1)&&($('#ligne'+i).html().toUpperCase().indexOf(filtre1)) > -1){
+        $('#ligne'+i).show();
+
+     } else{
+         $('#ligne'+i).hide();
+         $('#infosLigne'+i).hide();
+     };  
+    };
+};
+
+
+//
+//
+//Appel AJAX et gros du programme
+//
+//
+function recupererListeDesVins(IdDeLemplacementAvecLeDiese) {
+
+
+    var url = 'http://fbrc.esy.es/afpa/Cave/api.php/VIN?include=COULEUR,REGION,PAYS,NOM_CUVEE,A_POUR_CEPAGE,CEPAGE,METS&transform=1';
+
+    function request(callback) {
+
+        var xhr = null;
+
+        xhr = getXMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                callback(this.responseText);
+            }
+        });
+        xhr.open("GET", url, true);
+        xhr.send();
+
+    };
+
+    function readData(sData) {
+        if (sData.length > 0) {
+            $(IdDeLemplacementAvecLeDiese).html(" ");
+            mettreLaBarreDeRecherche($('#ContenairPrincipal'));
+            let traitement = JSON.parse(sData);
+            (function () {
+                $(IdDeLemplacementAvecLeDiese).append('<table class="container" id="tableauPrincipal" ></table>');
+                $('#tableauPrincipal').append('<tr class="row" ><th class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">Cuvée</th><th class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">Type</th><th class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">Région</th></tr>');
+                $(traitement.VIN).each(function (i) {
+                    console.log(traitement);
+                    $('#tableauPrincipal').append('<tr class="row" id = "ligne' + i + '"><td class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">' + traitement.VIN[i].NOM_CUVEE + '</td><td class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">' + traitement.VIN[i].COULEUR[0].NOMCOULEUR + '</td><td class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">  ' + traitement.VIN[i].REGION[0].NOMREGION + ', ' + traitement.VIN[i].REGION[0].PAYS[0].NOMPAYS + '  </td></tr>');
+
+                                       $('#ligne'+i).click(function(){
+                                           developperLigneVin(i);
+                                           
+                                       });
+
+                    
+                    
+                    //
+                    //création de la div secondaire
+                    //                 
+                    $('#ligne'+i).after('<div id="infosLigne'+i+'" class="menuRetractable affichageEnLigne col-xs-12 col-sm-12 col-md-12 col-lg-12 col-lg-offset-1 "></div>' );
+                                     
+                    //
+                    //Ajout des mets
+                    //
+                    $('#infosLigne' + i).append('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1" id="metsLigne' + i + '" > Mets en accords : <ul></ul></div> ');
+                    $(traitement.VIN[i].S_ACCORDE_AVEC).each(function (k) {
+                        $('#metsLigne' + i).append('<li>' + traitement.VIN[i].S_ACCORDE_AVEC[k].METS[0].NOM + '</li> ');
+                    });
+                    
+                    //
+                    //Ajout des cépages
+                    //
+                    $('#infosLigne' + i).append('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1" id="cepagesLigne' + i + '"> Cépage(s) : <ul></ul></div>');
+                    $(traitement.VIN[i].A_POUR_CEPAGE).each(function (j) {
+                        $('#cepagesLigne' + i).append('<li>' + traitement.VIN[i].A_POUR_CEPAGE[j].CEPAGE[0].NOMCEPAGE + '</li> ');
+                    });                                  
+                    
+                    $('#infosLigne'+i).hide();
+                });
+                
+            })();
+        } else {
+            console.log("Is bad");
+        }
+    };
+    request(readData);
+
+            function developperLigneVin(numeroLigne){
+               
+             $('#infosLigne'+numeroLigne).toggle();
+                
+            };
+
+};
