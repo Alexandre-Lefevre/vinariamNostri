@@ -4,6 +4,7 @@
 }
 
 body {
+    font-family: "Pacifico", Helvetica, Arial, sans-serif;
     background-image: url(img/Bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -70,6 +71,7 @@ body {
     border-radius: 0.4em;
     margin-right: 0.2em;
     margin-left: 0.2em;
+    margin-bottom: 3em;
 }
 
 
@@ -108,7 +110,9 @@ body {
 #AffichageListeMetsQuandEnregistrer {
     color: white;
 }
-
+footer {
+    text-align: center;
+}
 @media screen and (max-width: 992px) {
     #BgHead {
         min-height: 7.8em;
@@ -127,12 +131,15 @@ body {
 }
 
 table {
-    border     : 1px solid gray;
-    width      : 100%;
+/*    border : 1px solid gray;*/
+    width  : 100%;
     text-align : center;
 }
  
 table#sourcetable tbody tr {
+    background-color: rgba(166, 172, 175, 0.3);
+}
+table#Sourcetable tbody tr {
     background-color: rgba(166, 172, 175, 0.3);
 }
  
@@ -140,6 +147,12 @@ table#sourcetable tbody  tr {
     cursor : pointer;
 }
 
+.Degustation {
+    display: block;
+    position: absolute;
+    right: 1.1em !important;
+    margin-top: 0.2em;
+}
 @media screen and (max-width: 600px) {
     #BgHead {
         min-height: 6.8em;

@@ -6,6 +6,8 @@ var TableRecupInfoAjouterVin = new Array();
 var TableRecupInfoMets = new Array();
 // Variable recuperation info pour utilisation de la function POSTEstEnStock
 var CodePkVin, CodePkMillesime, CodePkContenance;
+//Variable recuperation CodeDegustation & CodeInvites
+var RecupCodeDegustation, RecupCodeInvite;
 
 function getXMLHttpRequest() {
     var xhr = null;
@@ -150,7 +152,6 @@ function ComboBoxRegion(IdDeLemplacementAvecLeDiese, CodePkCategoriePays) {
     function request(callback) {
 
         var xhr = null;
-
         xhr = getXMLHttpRequest();
 
         xhr.addEventListener("readystatechange", function () {
@@ -160,7 +161,6 @@ function ComboBoxRegion(IdDeLemplacementAvecLeDiese, CodePkCategoriePays) {
         });
         xhr.open("GET", url, true);
         xhr.send();
-
     };
 
     function readData(sData) {
@@ -422,9 +422,7 @@ function POSTCepage(CodeVin, CodeCepage) {
     var xhr = new getXMLHttpRequest();
 
     xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
-            console.log("Part 2 send");
-        }
+        if (this.readyState === 4) {}
     });
 
     xhr.open("POST", PosCepageUrl);
@@ -441,9 +439,7 @@ function POSTsAccordAvec(CodeMets, CodeVin, CodeAccord) {
     var xhr = new getXMLHttpRequest();
 
     xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
-            console.log("Part 3.1/3.3 send");
-        }
+        if (this.readyState === 4) {}
     });
 
     xhr.open("POST", Pos_S_ACCORDE_AVEC_Url);
@@ -605,7 +601,7 @@ function POSTEstEnStock(CODESTOCK) {
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
             //            code PK reponsse quand fiche vin cree, pour utiliser en lien a Region, Cepage, Accord.xt;
-            console.log("Post du stock" + this.responseText);
+            //            console.log("Post du stock" + this.responseText);
         }
     });
 
@@ -617,14 +613,90 @@ function POSTEstEnStock(CODESTOCK) {
 
 function Envoie(IdDeLemplacementAvecLeDiese, Funct_ionAexecute) {
     $(IdDeLemplacementAvecLeDiese).empty();
-    $(IdDeLemplacementAvecLeDiese).append('<span class="MiseEnForm" > <div> Requ&ecirc;te enregistr&eacute;e </div> </span>');
-    $(IdDeLemplacementAvecLeDiese).append('<button class="MiseEnForm" id="Reload">Retour</button>');
+    $(IdDeLemplacementAvecLeDiese).append('<span class="MiseEnForm" > <div class="MiseEnForm"> Requ&ecirc;te enregistr&eacute;e <br/><button id="Reload">Retour</button></div></span>');
     $("#Reload").click(function () {
         Funct_ionAexecute();
     });
 };
 
+function POSTInvites(NOM, PRENOM, ADRESSEMAIL) {
+    let PostInvitesurl = "http://fbrc.esy.es/afpa/Cave/api.php/INVITES/";
 
+    var data = "NOM=" + NOM + "&PRENOM=" + PRENOM + "&ADRESSEMAIL=" + ADRESSEMAIL;
+
+    var xhr = new getXMLHttpRequest();
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            //code PK reponsse quand fiche vin cree, pour utiliser en lien a Region, Cepage, Accord.xt;
+            RecupCodeInvite = this.responseText;
+
+        }
+    });
+
+    xhr.open("POST", PostInvitesurl);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(data);
+
+};
+
+function POSTDegustation(CODESTOCK, DATE, QUANTITE) {
+    let PostInvitesurl = "http://fbrc.esy.es/afpa/Cave/api.php/DEGUSTATION/";
+
+    var data = "CODESTOCK=" + CODESTOCK + "&DATE=" + DATE + "&QUANTITE=" + QUANTITE;
+
+    var xhr = new getXMLHttpRequest();
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            //code PK reponsse quand fiche vin cree, pour utiliser en lien a Region, Cepage, Accord.xt;
+            RecupCodeDegustation = (this.responseText);
+        }
+    });
+
+    xhr.open("POST", PostInvitesurl);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(data);
+
+};
+
+function PUTStock(CODESTOCK, STOCK) {
+    let PutStockurl = "http://fbrc.esy.es/afpa/Cave/api.php/STOCK/" + CODESTOCK;
+    var data = "STOCK=" + STOCK;
+
+    var xhr = new getXMLHttpRequest();
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            //            console.log(this.responseText);
+        }
+    });
+
+    xhr.open("PUT", PutStockurl);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(data);
+
+};
+
+function POSTA_Degustation(CODEDEGUSTATION, CODEINVITE, COMMENTAIRE) {
+    let PostInvitesurl = "http://fbrc.esy.es/afpa/Cave/api.php/A_DEGUSTE/";
+
+    var data = "CODEDEGUSTATION=" + CODEDEGUSTATION + "&CODEINVITE=" + CODEINVITE + "&COMMENTAIRE=" + COMMENTAIRE;
+
+    var xhr = new getXMLHttpRequest();
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            //code PK reponsse quand fiche vin cree, pour utiliser en lien a Region, Cepage, Accord.xt;
+            //            console.log(this.responseText);
+        }
+    });
+
+    xhr.open("POST", PostInvitesurl);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(data);
+
+};
 
 //////////////////////////////////////////// CAVE ///////////////////////////////////////
 
@@ -639,7 +711,7 @@ function GetCave(callback) {
         }
     });
 
-    xhr.open("GET", "http://fbrc.esy.es/afpa/Cave/api.php/VIN?include=EST_EN_STOCK,CONTENANCE,REGION,COULEUR,MILLESIME,STOCK,EMPLACEMENT,PAYS,A_POUR_CEPAGE,CEPAGE?transfomr=1");
+    xhr.open("GET", "http://fbrc.esy.es/afpa/Cave/api.php/VIN?include=EST_EN_STOCK,CONTENANCE,REGION,COULEUR,MILLESIME,STOCK,EMPLACEMENT,PAYS,A_POUR_CEPAGE,INVITES,CEPAGE?transfomr=1");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
     xhr.send(data);
@@ -648,8 +720,9 @@ function GetCave(callback) {
 function CbCave(sData) {
     if (sData.length > 0) {
         let traitement = JSON.parse(sData);
-        console.log(traitement);
+        $("#ContenairPrincipal").empty();
         $("#ContenairPrincipal").append('<table  id="sourcetable"><tbody id="AfficheVin" class="container"></tbody></table>');
+        $("#AfficheVin").append('<tr class="row" ><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " > Nom du Vin </td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " > Type de Vin </td><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " > Region </td><td class="col" > Millesime </td><td class="col" > Contenance </td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " > Stock </td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " > Prix </td></tr>');
         $("#AfficheVin").css('color', 'white');
         $(traitement.VIN.records).each(function (i) {
             let ValidationAffichageBool = false;
@@ -684,7 +757,8 @@ function CbCave(sData) {
                 ContenanceAffichage = " ",
                 NbStockAffichage = " ",
                 StockAffichage = " ",
-                EmplacementAffichage = " ";
+                EmplacementAffichage = " ",
+                CodePkStockPourDegustation = " ";
             (function AfficheStocks() {
                 $(traitement.EST_EN_STOCK.records).each(function (ii) {
                     try {
@@ -705,6 +779,7 @@ function CbCave(sData) {
                                 try {
                                     if (traitement.STOCK.records[iiiii][0] === traitement.EST_EN_STOCK.records[ii][1]) {
                                         NbStockAffichage = traitement.STOCK.records[iiiii][2];
+                                        CodePkStockPourDegustation = traitement.STOCK.records[iiiii][0];
                                         if (NbStockAffichage >= 1) {
                                             ValidationAffichageBool = true;
                                         }
@@ -726,15 +801,15 @@ function CbCave(sData) {
                 })
             })();
             if (ValidationAffichageBool) {
-                $("#AfficheVin").append('<tr class="row"  id="Ligne' + i + '" ><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " >' + traitement.VIN.records[i][1] + '</td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " >' + CouleurVinAffichage + '</td><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " >' + RegionVinAffichage + '</td><td class="col" >' + PayVinAffichage + '</td><td class="col" >' + MillesimeAffichage + '</td><td class="col" >' + ContenanceAffichage + '</td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " >' + NbStockAffichage + '</td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " >' + PrixAffichage + '</td></tr>');
+                $("#AfficheVin").append('<tr class="row"  id="Ligne' + i + '" ><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " >' + traitement.VIN.records[i][1] + '</td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " >' + CouleurVinAffichage + '</td><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " >' + RegionVinAffichage + '</td><td class="col" >' + MillesimeAffichage + '</td><td class="col" >' + ContenanceAffichage + '</td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " >' + NbStockAffichage + '/&cup;</td><td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 " >' + PrixAffichage + '&#8364;</td></tr>');
 
-                $('#Ligne' + i).after('<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="Ligne' + i + 'Tg">Emplacement de la bouteil : ' + EmplacementAffichage + '</div>');
+                $('#Ligne' + i).after('<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="Ligne' + i + 'Tg"><button RNSB="' + NbStockAffichage + '"  CPSPD="' + CodePkStockPourDegustation + '"  class="Degustation">Dégustation</button>Emplacement de la bouteil : ' + EmplacementAffichage + '<div></div>Pays d&apos;origine : ' + PayVinAffichage + '</div>');
                 $('#Ligne' + i + 'Tg').hide();
                 $('#Ligne' + i + 'Tg').css('width', '100%');
             };
         })
         //event click sur ligne & affichage dropdown
-        var pickedup, RecupIdLigneSelect;
+        var pickedup, RecupIdLigneSelect, Cpsdp, Rnsb, RnsbDeux;
         (function () {
             $("#sourcetable tbody tr").on("click", function (event) {
 
@@ -745,18 +820,109 @@ function CbCave(sData) {
                 $(this).css("background-color", "red");
                 RecupIdLigneSelect = "#" + $(this).attr('id');
                 $(RecupIdLigneSelect + 'Tg').toggle();
-
                 pickedup = $(this);
             });
-
         })();
+        //event click sur boutton dégustation ouvrant sur un menus 
+        $(".Degustation").click(function () {
+            $("#ContenairPrincipal").empty();
+            Cpsdp = $(this).attr('CPSPD');
+            Rnsb = $(this).attr('RNSB');
+            RnsbDeux = Rnsb;
+            $('#ContenairPrincipal').append('<span class="MiseEnForm" >Date de Degustation : <input type="date"  id="DateDeDegustation" name="DateDeDegustation"></input></span>');
+            $('#ContenairPrincipal').append('<span class="MiseEnForm" >Quantit&eacute;  : <input type="number"  id="NouvStock" name="NouvStock"></input></span>');
+            $('#ContenairPrincipal').append('<span class="MiseEnForm" ><button id="EnvoieDegustation"> Enregistrer Degustation </button</span>');
+
+            $("#EnvoieDegustation").click(function () {
+                let EnvoieQttNegative = RnsbDeux - $("#NouvStock").val();
+                if (EnvoieQttNegative >= 0) {
+                    POSTDegustation(Cpsdp, $("#DateDeDegustation").val(), $("#NouvStock").val());
+                    PUTStock(Cpsdp, EnvoieQttNegative);
+                    (function () {
+                        function InviteListeDesVin(traitement) {
+                            $("#ContenairPrincipal").empty();
+                            $('#ContenairPrincipal').append('<span class="MiseEnForm" ><button id="NouvInvites"> Ajouter un Invites dans la liste</button</span>');
+
+
+                            $("#ContenairPrincipal").append('<table  id="Sourcetable"><tbody id="AfficheInvites" class="container"></tbody></table>');
+                            $("#ContenairPrincipal").append('<div class"MiseEnForm" id="AffichageListeInvite" ></div>');
+                            $("#ContenairPrincipal").append('<div class"MiseEnForm" id="BTNa_post" ><button id="EnregistreListe" > Enregistre</button></div>');
+                            $("#AfficheInvites").css('color', 'white');
+                            $("#AffichageListeInvite").css('color', 'white');
+                            $(traitement.INVITES.records).each(function (t) {
+                                $('#AfficheInvites').append('<tr class="row" CodeT="' + t + '" CodeInvite="' + traitement.INVITES.records[t][0] + '" id="Ligne' + t + '" ><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3" >' + traitement.INVITES.records[t][1] + '</td><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " >' + traitement.INVITES.records[t][2] + '</td><td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 " >' + traitement.INVITES.records[t][3] + '</td></tr>');
+                            })
+
+                            var Pickedup, CI, CT;
+                            $("#Sourcetable tbody tr").on('click', function (event) {
+                                CI = $(this).attr('CodeInvite');
+                                CT = $(this).attr('CodeT');
+                                if (this) {
+                                    $("#AffichageListeInvite").append('<div><span>Nom : ' + traitement.INVITES.records[CT][1] + '</span><span>Prenom : ' + traitement.INVITES.records[CT][2] + '</span><span>Email : ' + traitement.INVITES.records[CT][2] + '</span><span> Commentaire de invites : <input type"text" Ci="' + CI + '" class="A_Post" ></input></span></div>');
+                                    $(this).empty();
+                                }
+                            })
+
+                            $("#EnregistreListe").click(function () {
+                                $('.A_Post').each(function () {
+                                    let CODEi = $(this).attr('Ci')
+                                    let VALinput = $(this).val()
+
+                                    POSTA_Degustation(RecupCodeDegustation, CODEi, VALinput);
+                                    
+                                    GetCave(CbCave);
+                                });
+                            });
+
+                            $('#NouvInvites').click(function () {
+                                $("#NouvInvites").hide();
+                                $('#NewInvites').show();
+                                $('#ContenairPrincipal').append('<div id="NewInvites" class="MiseEnForm"></div>');
+                                $('#NewInvites').append('<span class="MiseEnForm" >Nom  : <input type="text"  id="NomInvites" name="NomInvites"></input></span>');
+                                $('#NewInvites').append('<span class="MiseEnForm" >Prenom  : <input type="text"  id="PrenomInvites" name="PrenomInvites"></input></span>');
+                                $('#NewInvites').append('<span class="MiseEnForm" >Adresse Mail  : <input type="email"  id="EmailInvites" name="EmailInvites"></input></span>');
+                                $('#NewInvites').append('<span class="MiseEnForm" ><button id="EnvoieInvites"> Enregistrer invites </button</span>');
+
+                                $("#EnvoieInvites").click(function () {
+                                    $("#NouvInvites").show();
+
+                                    if ($("#NomInvites").val().length >= 1 || $("#PrenomInvites").val().length >= 1 || $("#EmailInvites").val().length >= 1) {
+                                        POSTInvites($("#NomInvites").val(), $("#PrenomInvites").val(), $("#EmailInvites").val());
+                                        GetCaveRefresh();
+                                    } else {
+                                        console.log('pas send');
+                                    }
+                                });
+                            });
+                        };
+                        InviteListeDesVin(traitement)
+
+                        function GetCaveRefresh() {
+                            var data = "undefined=";
+
+                            var xhr = new XMLHttpRequest();
+
+                            xhr.addEventListener("readystatechange", function () {
+                                if (this.readyState === 4) {
+                                    InviteListeDesVin(JSON.parse(this.responseText))
+                                }
+                            });
+
+                            xhr.open("GET", "http://fbrc.esy.es/afpa/Cave/api.php/VIN?include=EST_EN_STOCK,CONTENANCE,REGION,COULEUR,MILLESIME,STOCK,EMPLACEMENT,PAYS,A_POUR_CEPAGE,INVITES,CEPAGE?transfomr=1");
+                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                            xhr.send(data);
+                        };
+                    })()
+                } else {
+                    console.log("impossible d'envoie une qqt negative!");
+                }
+            });
+        });
     };
 }
-
 /////// La Cave //////////
-$("#btnCave").click(function () {
-    $("#ContenairPrincipal").empty();
-    //    http: //fbrc.esy.es/afpa/Cave/api.php/VIN?include=EST_EN_STOCK,CONTENANCE,MILLESIME,STOCK,A_POUR_CEPAGE,CEPAGE?transfomr=1
+$("#btnCaveNavbar").click(function () {
     GetCave(CbCave);
 });
 
@@ -767,16 +933,17 @@ $("#btnCave").click(function () {
 function AjouterUnVin() {
     //initialisation de la div principal 
     $("#ContenairPrincipal").empty();
+    $("#ContenairPrincipal").append('<div class="row MiseEnForm"  ><h3>Ajouter un Vin</h3></div>');
     // Nom de la cuvee //
-    $('#ContenairPrincipal').append('<span class="MiseEnForm" >Nom de la cuv&eacute;e : <input type="text"  id="nomcuve" name="nomcuve"></input></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"  ><span class="MiseEnForm" >Nom de la cuv&eacute;e : <input type="text"  id="nomcuve" name="nomcuve"></input></span></div>');
     //Combobox Couleur 
-    $('#ContenairPrincipal').append('<span class="MiseEnForm" >Type de vin : <select  id="couleur" name="couleur"></select></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm" >Type de vin : <select  id="couleur" name="couleur"></select></span></div>');
     ComboBoxCouleur('#couleur');
     //Combobox Appellation
-    $('#ContenairPrincipal').append('<span class="MiseEnForm" >Appellation : <select id="APPELLATION" name="APPELLATION"></select></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm" >Appellation : <select id="APPELLATION" name="APPELLATION"></select></span></div>');
     ComboBoxAppellation('#APPELLATION');
     //Combobox Pays
-    $('#ContenairPrincipal').append('<span class="MiseEnForm" >Pays : <select id="pays" name="pays"></select></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm" >Pays : <select id="pays" name="pays"></select></span></div>');
     ComboBoxPays('#pays');
     // fonction pour lister les regions du pays select*
     (function () {
@@ -790,24 +957,25 @@ function AjouterUnVin() {
                     ComboBoxRegion('#region', $("#pays option:selected").attr("value"));
                 } catch {}
             });
+            // declencheur quand statut change
         }).trigger("change");
     })();
     //Combobox Region
-    $('#ContenairPrincipal').append('<span class="MiseEnForm HRegion" >Region : <select class="HRegion" id="region" name="region"></select></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm HRegion" >Region : <select class="HRegion" id="region" name="region"></select></span></div>');
     $('.HRegion').hide();
     //type de culture
-    $('#ContenairPrincipal').append('<span class="MiseEnForm" >Type de culture : <input id="Type_de_culture" name="Type_de_culture"></input></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm" >Type de culture : <input id="Type_de_culture" name="Type_de_culture"></input></span></div>');
     //checkbox Cepage
-    $('#ContenairPrincipal').append('<span class="MiseEnForm" ><fieldset><span id="Cepage"></span></fieldset></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm" ><fieldset><span id="Cepage"></span></fieldset></span></div>');
     CheckBoxCepages('#Cepage');
 
-    $('#ContenairPrincipal').append('<span class="MiseEnForm"><button id="EnregistrerDesMets" > Afficher les mets</button></span>');
-    $('#ContenairPrincipal').append('<div id="ContenairMets"></div>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm"><button id="EnregistrerDesMets" > Afficher les mets</button></span></div>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><div id="ContenairMets"></div></div>');
 
     //liste des mets enregistrer       
-    $('#ContenairPrincipal').append('<div class="container" id="AffichageListeMetsQuandEnregistrer" ></div>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><div class="container" id="AffichageListeMetsQuandEnregistrer" ></div></div>');
     // commentaire
-    $('#ContenairPrincipal').append('<span class="MiseEnForm" >Commentaire : <input type="text" id="commentaire" name="commentaire"></input></span>');
+    $('#ContenairPrincipal').append('<div class="row MiseEnForm"><span class="MiseEnForm" >Commentaire : <input type="text" id="commentaire" name="commentaire"></input></span></div>');
 
     //Evenement clic sur btn mets
     $("#EnregistrerDesMets").click(function () {
@@ -858,7 +1026,6 @@ function AjouterUnVin() {
                 TableJointD.push($("#METS option:selected").attr("value"), $("#NivAccordMets option:selected").attr("value"));
                 TableRecupInfoMets.push(TableJointD);
 
-                console.log(TableRecupInfoMets);
                 $('#AffichageListeMetsQuandEnregistrer').append('<tr class="row" ><td class="col-xs-4 col-sm-4 col-md-4 col-lg-4 ">' + $("#CategorieMets option:selected").html() + '</td><td class="col-xs-4 col-sm-4 col-md-4 col-lg-4" >' + $("#METS option:selected").html() + '</td><td class="col-xs-4 col-sm-4 col-md-4 col-lg-4" >' + $("#NivAccordMets option:selected").html() + '</td></tr>');
 
                 // reaffichage du bouton enregistrer mets puis vide la zone
@@ -871,9 +1038,8 @@ function AjouterUnVin() {
         });
     });
 
-
     //bouton valider (qui verifira si toutes les zone on bien une doné) qui fera un post
-    $("#ContenairPrincipal").append('<span class="MiseEnForm"><button id="btnEnregistreVin" >Enregistrer le Vin</button></span>');
+    $("#ContenairPrincipal").append('<div class="row MiseEnForm"><span class="MiseEnForm"><button id="btnEnregistreVin" >Enregistrer le Vin</button></span></div>');
 
     $("#btnEnregistreVin").click(function (e) {
         let Nom_Cuve = $("#nomcuve").val();
